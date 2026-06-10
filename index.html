@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BoxTK 4.5 | Financial Information Consulting</title>
+    <style>
+        :root {
+            --primary: #1A365D;
+            --primary-hover: #274777;
+            --secondary: #64748B;
+            --accent: #D97706;
+            --bg-main: #F8FAFC;
+            --text-title: #0F172A;
+            --text-body: #475569;
+            --text-light: #94A3B8;
+            --page-normal: #E2E8F0;
+            --page-disabled: #CBD5E1;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-body);
+            line-height: 1.6;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        ul {
+            list-style: none;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header & Navigation */
+        header {
+            background-color: var(--primary);
+            position: sticky;
+            top: 0;
+            z-index: 999;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .nav-wrap {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 70px;
+        }
+
+        .logo {
+            color: #FFFFFF;
+            font-size: 24px;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .main-nav {
+            display: flex;
+            gap: 5px;
+        }
+
+        .main-nav li a {
+            display: block;
+            color: #FFFFFF;
+            padding: 12px 20px;
+            border-radius: 4px;
+            transition: background-color 0.3s ease;
+            font-weight: 500;
+        }
+
+        .main-nav li a:hover {
+            background-color: var(--primary-hover);
+        }
+
+        .main-nav li a.active {
+            background-color: var(--accent);
+        }
+
+        .menu-btn {
+            display: none;
+            color: #fff;
+            font-size: 28px;
+            cursor: pointer;
+        }
+
+        /* Mobile Nav */
+        .mobile-nav {
+            position: absolute;
+            top: 70px;
+            left: 0;
+            width: 100%;
+            background-color: var(--primary);
+            display: none;
+            flex-direction: column;
+        }
+
+        .mobile-nav.show {
+            display: flex;
+        }
+
+        .mobile-nav li a {
+            color: #fff;
+            padding: 15px 25px;
+            display: block;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .mobile-nav li a.active {
+            background-color: var(--accent);
+        }
+
+        /* Section Common */
+        section {
+            padding: 80px 0;
+            scroll-margin-top: 70px;
+        }
+
+        .section-title {
+            font-size: 36px;
+            color: var(--text-title);
+            text-align: center;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+
+        .section-subtitle {
+            color: var(--text-light);
+            text-align: center;
+            font-size: 18px;
+            margin-bottom: 50px;
+        }
+
+        /* 新增子页面描述样式 */
+        .subpage-description {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.05);
+            margin-bottom: 40px;
+            line-height: 1.8;
+        }
+
+        .subpage-description h4 {
+            color: var(--primary);
+            font-size: 22px;
+            margin-bottom: 15px;
+            border-left: 4px solid var(--accent);
+            padding-left: 12px;
+        }
+
+        .subpage-description ul {
+            margin: 15px 0 15px 20px;
+            list-style: disc;
+        }
+
+        .subpage-description li {
+            margin-bottom: 8px;
+        }
+
+        /* Hero Section */
+        #home {
+            padding: 0;
+        }
+
+        .hero {
+            width: 100%;
+            height: calc(100vh - 70px);
+            background: linear-gradient(rgba(26, 54, 93, 0.85), rgba(26, 54, 93, 0.75)), 
+            url(https://smuckeckerlenm810-blip.github.io/328/6.jpg) center/cover no-repeat;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: #fff;
+        }
+
+        .hero-content h1 {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+
+        .hero-content p {
+            font-size: 20px;
+            max-width: 700px;
+            margin: 0 auto 35px;
+            opacity: 0.9;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 14px 32px;
+            background-color: var(--accent);
+            color: #fff;
+            border-radius: 4px;
+            font-weight: 600;
+            transition: opacity 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .btn:hover {
+            opacity: 0.9;
+        }
+
+        /* About Section */
+        .about-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: center;
+        }
+
+        .about-img img {
+            width: 100%;
+            border-radius: 8px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+        }
+
+        .about-text h3 {
+            font-size: 28px;
+            color: var(--text-title);
+            margin-bottom: 20px;
+        }
+
+        .about-text p {
+            margin-bottom: 16px;
+            font-size: 16px;
+        }
+
+        /* Services Section */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+        }
+
+        .service-card {
+            background: #fff;
+            padding: 35px 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+            transition: transform 0.3s ease;
+        }
+
+        .service-card:hover {
+            transform: translateY(-8px);
+        }
+
+        .service-card h4 {
+            font-size: 22px;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+
+        .service-card p {
+            color: var(--text-body);
+        }
+
+        /* 新增服务子项详情 */
+        .service-detail {
+            margin-top: 12px;
+            font-size: 14px;
+            color: var(--secondary);
+            padding-top: 10px;
+            border-top: 1px dashed var(--page-normal);
+        }
+
+        /* Team Section */
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 25px;
+        }
+
+        .team-card {
+            background: #fff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+        }
+
+        .team-img img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .team-info {
+            padding: 20px;
+            text-align: center;
+        }
+
+        /* 新增团队成员详情 */
+        .team-bio {
+            margin-top: 10px;
+            font-size: 14px;
+            color: var(--text-body);
+            line-height: 1.5;
+        }
+
+        .team-info h5 {
+            font-size: 18px;
+            color: var(--text-title);
+            margin-bottom: 5px;
+        }
+
+        .team-info span {
+            color: var(--accent);
+            font-size: 14px;
+        }
+
+        /* Contact Section */
+        .contact-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+        }
+
+        .contact-info {
+            background-color: var(--primary);
+            color: #fff;
+            padding: 40px 30px;
+            border-radius: 8px;
+        }
+
+        .contact-info h3 {
+            font-size: 26px;
+            margin-bottom: 30px;
+        }
+
+        .contact-item {
+            margin-bottom: 25px;
+        }
+
+        .contact-item h4 {
+            font-size: 18px;
+            margin-bottom: 8px;
+            color: var(--accent);
+        }
+
+        .contact-item p {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+
+        .contact-form {
+            background: #fff;
+            padding: 40px 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 16px rgba(0,0,0.08);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--text-title);
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid var(--page-normal);
+            border-radius: 4px;
+            font-size: 16px;
+            color: var(--text-body);
+        }
+
+        .form-group textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .success-msg {
+            display: none;
+            margin-top: 15px;
+            padding: 12px;
+            background-color: #dcfce7;
+            color: #166534;
+            border-radius: 4px;
+            text-align: center;
+        }
+
+        /* Pagination Style */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin: 40px 0;
+        }
+
+        .page-link {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background-color: var(--page-normal);
+            color: var(--text-body);
+            border-radius: 4px;
+            transition: 0.3s;
+        }
+
+        .page-link.active {
+            background-color: var(--primary);
+            color: #fff;
+        }
+
+        .page-link.disabled {
+            background-color: var(--page-disabled);
+            color: var(--text-light);
+            cursor: not-allowed;
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--primary);
+            color: #fff;
+            padding: 40px 0;
+            text-align: center;
+        }
+
+        footer p {
+            opacity: 0.8;
+        }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .services-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .team-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .main-nav {
+                display: none;
+            }
+            .menu-btn {
+                display: block;
+            }
+            .about-row,
+            .contact-row {
+                grid-template-columns: 1fr;
+            }
+            .hero-content h1 {
+                font-size: 36px;
+            }
+            .section-title {
+                font-size: 28px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+            .team-grid {
+                grid-template-columns: 1fr;
+            }
+            section {
+                padding: 50px 0;
+            }
+            .subpage-description {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header & Navigation -->
+    <header>
+        <div class="container nav-wrap">
+            <a href="#home" class="logo">BoxTK 4.5</a>
+            <ul class="main-nav">
+                <li><a href="#home" class="active">Home</a></li>
+                <li><a href="#about">About Us</a></li>
+                <li><a href="#services">Services</a></li>
+                <li><a href="#team">Our Team</a></li>
+                <li><a href="#contact">Contact Us</a></li>
+            </ul>
+            <div class="menu-btn" id="menuBtn">&#9776;</div>
+        </div>
+        <!-- Mobile Navigation -->
+        <ul class="mobile-nav" id="mobileNav">
+            <li><a href="#home" class="active">Home</a></li>
+            <li><a href="#about">About Us</a></li>
+            <li><a href="#services">Services</a></li>
+            <li><a href="#team">Our Team</a></li>
+            <li><a href="#contact">Contact Us</a></li>
+        </ul>
+    </header>
+
+    <!-- Home Section -->
+    <section id="home">
+        <div class="hero">
+            <div class="hero-content">
+                <h1>Professional Financial Information Consulting</h1>
+                <p>BoxTK 4.5 provides reliable, professional and customized financial consulting services for global clients, empowering your financial decisions with expertise.</p>
+                <a href="#contact" class="btn">Get In Touch</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Us Section -->
+    <section id="about">
+        <div class="container">
+            <h2 class="section-title">About BoxTK 4.5</h2>
+            <p class="section-subtitle">Your Trusted Financial Consulting Partner</p>
+            
+            <!-- 新增关于我们子页面描述 -->
+            <div class="subpage-description">
+                <h4>Company Profile</h4>
+                <p>Established in 2010, BoxTK 4.5 Financial Information Consulting has grown from a local financial advisory firm in Nottingham to a globally recognized consulting service provider with clients across Europe, Asia, and North America. Our core mission is to bridge the gap between complex financial markets and clients' practical needs through data-driven insights and personalized strategies.</p>
+                <h4>Our Core Advantages</h4>
+                <ul>
+                    <li>15+ years of professional financial consulting experience in global markets</li>
+                    <li>Team of certified financial analysts (CFA) and chartered accountants (ACA)</li>
+                    <li>Customized solutions tailored to different industry characteristics and client scales</li>
+                    <li>Real-time market monitoring system with 99.9% data accuracy</li>
+                    <li>Long-term cooperative relationships with top financial institutions worldwide</li>
+                </ul>
+                <h4>Our Mission & Vision</h4>
+                <p>Mission: To provide transparent, professional and reliable financial consulting services, helping clients achieve sustainable financial growth.<br>
+                Vision: To become the most trusted financial information consulting brand in the global mid-market segment by 2030.</p>
+            </div>
+
+            <div class="about-row">
+                <div class="about-img">
+                    <img src="https://smuckeckerlenm810-blip.github.io/328/7.jpg" alt="Company Overview">
+                </div>
+                <div class="about-text">
+                    <h3>Who We Are</h3>
+                    <p>BoxTK 4.5 is a leading financial information consulting company based in Nottingham, England. We focus on delivering accurate market analysis, financial planning and investment consulting solutions.</p>
+                    <p>With rich industry experience and a professional analyst team, we adhere to rigorous service standards and aim to create stable value for every client. Our business covers multiple financial fields to meet diversified consulting demands.</p>
+                    <p>Integrity, professionalism and innovation are our core values. We keep pace with market changes and provide forward-looking financial suggestions for enterprises and individuals worldwide.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" style="background-color: #fff;">
+        <div class="container">
+            <h2 class="section-title">Our Services</h2>
+            <p class="section-subtitle">Comprehensive Financial Consulting Solutions</p>
+            
+            <!-- 新增服务子页面描述 -->
+            <div class="subpage-description">
+                <h4>Service Overview</h4>
+                <p>Our service system covers the entire financial lifecycle of enterprises and individuals, from market research and risk assessment to investment implementation and performance tracking. We adopt a modular service model that can flexibly combine different service modules according to client needs to form the most cost-effective solution.</p>
+                <h4>Service Process</h4>
+                <ol>
+                    <li>Initial consultation: Understand client needs and financial status</li>
+                    <li>Program design: Customize exclusive financial consulting solutions</li>
+                    <li>Program confirmation: Communicate and adjust the program with clients</li>
+                    <li>Implementation tracking: Real-time monitoring of program implementation effect</li>
+                    <li>Effect evaluation: Regular evaluation and optimization of service effect</li>
+                    <li>Continuous service: Provide long-term follow-up and advisory services</li>
+                </ol>
+                <h4>Service Guarantee</h4>
+                <p>All our consulting services are supported by a strict quality control system. We promise:
+                <br>• Response to client inquiries within 24 hours
+                <br>• Delivery of analysis reports within the agreed time limit
+                <br>• Regular review and update of consulting programs
+                <br>• Strict confidentiality of client financial information</p>
+            </div>
+
+            <div class="services-grid">
+                <div class="service-card">
+                    <h4>Financial Market Analysis</h4>
+                    <p>Real-time market trend research, data sorting and professional analysis reports to help you grasp market dynamics accurately.</p>
+                    <div class="service-detail">
+                        <strong>Coverage:</strong> Stock market, foreign exchange market, commodity market, bond market<br>
+                        <strong>Delivery:</strong> Daily market brief, weekly analysis report, monthly trend forecast
+                    </div>
+                </div>
+                <div class="service-card">
+                    <h4>Investment Consulting</h4>
+                    <p>Personalized investment advice, risk assessment and portfolio planning suitable for different risk preferences.</p>
+                    <div class="service-detail">
+                        <strong>Services:</strong> Risk tolerance assessment, portfolio optimization, investment product selection<br>
+                        <strong>Adapt to:</strong> Conservative, moderate, aggressive investment styles
+                    </div>
+                </div>
+                <div class="service-card">
+                    <h4>Enterprise Financial Planning</h4>
+                    <p>Complete financial planning, cost control and revenue optimization solutions for small and medium enterprises.</p>
+                    <div class="service-detail">
+                        <strong>Focus areas:</strong> Cash flow management, tax planning, financing strategy<br>
+                        <strong>Suitable for:</strong> Startups, growing SMEs, mature enterprises
+                    </div>
+                </div>
+                <div class="service-card">
+                    <h4>Financial Risk Management</h4>
+                    <p>Identify potential financial risks, formulate prevention plans and improve overall risk resistance capability.</p>
+                    <div class="service-detail">
+                        <strong>Risk types:</strong> Market risk, credit risk, operational risk, liquidity risk<br>
+                        <strong>Solutions:</strong> Risk identification, assessment, early warning, control
+                    </div>
+                </div>
+                <div class="service-card">
+                    <h4>Industry Research Report</h4>
+                    <p>In-depth industry investigation, competitive analysis and long-term industry development forecast reports.</p>
+                    <div class="service-detail">
+                        <strong>Industries covered:</strong> Finance, technology, healthcare, energy, consumer goods<br>
+                        <strong>Report depth:</strong> Basic version, professional version, customized version
+                    </div>
+                </div>
+                <div class="service-card">
+                    <h4>Financial Advisory</h4>
+                    <p>One-on-one professional financial advisory services to solve your financial puzzles efficiently.</p>
+                    <div class="service-detail">
+                        <strong>Service methods:</strong> On-site consultation, online consultation, telephone consultation<br>
+                        <strong>Advisor qualification:</strong> At least 8 years of industry experience, relevant professional certification
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pagination Demo -->
+            <div class="pagination">
+                <a href="#" class="page-link disabled">&laquo;</a>
+                <a href="#" class="page-link active">1</a>
+                <a href="#" class="page-link">2</a>
+                <a href="#" class="page-link">3</a>
+                <a href="#" class="page-link">&raquo;</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Our Team Section -->
+    <section id="team">
+        <div class="container">
+            <h2 class="section-title">Our Professional Team</h2>
+            <p class="section-subtitle">Elite Experts With Rich Financial Experience</p>
+            
+            <!-- 新增团队子页面描述 -->
+            <div class="subpage-description">
+                <h4>Team Structure</h4>
+                <p>Our team consists of four core departments: Market Analysis Department, Investment Consulting Department, Enterprise Finance Department and Risk Management Department. Each department is led by senior experts with more than 10 years of industry experience, forming a professional and efficient service team.</p>
+                <h4>Recruitment & Training</h4>
+                <p>We adhere to a strict talent selection mechanism and a perfect training system:
+                <br>• Recruit talents from top financial institutions and universities worldwide
+                <br>• Regular professional skill training and industry knowledge update
+                <br>• International exchange and study opportunities
+                <br>• Performance evaluation and incentive mechanism based on client satisfaction</p>
+                <h4>Professional Certifications</h4>
+                <p>Our team members hold a number of international top financial certifications:
+                <br>• Chartered Financial Analyst (CFA)
+                <br>• Certified Public Accountant (CPA)
+                <br>• Financial Risk Manager (FRM)
+                <br>• Chartered Accountant (ACA/ACCA)
+                <br>• Certified Financial Planner (CFP)</p>
+            </div>
+
+            <div class="team-grid">
+                <div class="team-card">
+                    <div class="team-img">
+                        <img src="https://smuckeckerlenm810-blip.github.io/328/8.jpg" alt="Team Member">
+                    </div>
+                    <div class="team-info">
+                        <h5>Michael Brown</h5>
+                        <span>CEO & Senior Consultant</span>
+                        <div class="team-bio">
+                            20+ years of financial consulting experience, former senior advisor of a top international financial institution, CFA & FRM dual certification holder, expert in global market investment strategy.
+                        </div>
+                    </div>
+                </div>
+                <div class="team-card">
+                    <div class="team-img">
+                        <img src="https://smuckeckerlenm810-blip.github.io/328/9.jpg" alt="Team Member">
+                    </div>
+                    <div class="team-info">
+                        <h5>Sarah Wilson</h5>
+                        <span>Market Analyst</span>
+                        <div class="team-bio">
+                            12 years of market analysis experience, specializes in European and American financial markets, has published multiple industry research reports, good at quantitative analysis and trend prediction.
+                        </div>
+                    </div>
+                </div>
+                <div class="team-card">
+                    <div class="team-img">
+                        <img src="https://smuckeckerlenm810-blip.github.io/328/10.jpg" alt="Team Member">
+                    </div>
+                    <div class="team-info">
+                        <h5>David Clark</h5>
+                        <span>Investment Advisor</span>
+                        <div class="team-bio">
+                            15 years of investment consulting experience, CFP certified financial planner, has provided personalized investment solutions for more than 500 high-net-worth clients.
+                        </div>
+                    </div>
+                </div>
+                <div class="team-card">
+                    <div class="team-img">
+                        <img src="https://smuckeckerlenm810-blip.github.io/328/11.jpg" alt="Team Member">
+                    </div>
+                    <div class="team-info">
+                        <h5>Emma Taylor</h5>
+                        <span>Financial Planner</span>
+                        <div class="team-bio">
+                            10 years of enterprise financial planning experience, ACCA certified accountant, specializes in SME financial optimization, has helped more than 200 enterprises improve their financial efficiency.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Us Section -->
+    <section id="contact" style="background-color: #fff;">
+        <div class="container">
+            <h2 class="section-title">Contact Us</h2>
+            <p class="section-subtitle">Feel Free To Reach Out To Us</p>
+            
+            <!-- 新增联系我们子页面描述 -->
+            <div class="subpage-description">
+                <h4>How To Get In Touch</h4>
+                <p>We provide multiple contact channels to ensure that you can get timely response and professional solutions. Whether you have questions about our services, need to consult financial issues, or want to discuss cooperation opportunities, we are always ready to serve you.</p>
+                <h4>Consultation Appointment Process</h4>
+                <ul>
+                    <li>1. Submit your consultation request through the form below or phone/email</li>
+                    <li>2. Our customer service will contact you within 24 hours to confirm the consultation details</li>
+                    <li>3. Arrange professional consultants to communicate with you according to your needs</li>
+                    <li>4. Provide initial consulting opinions and service quotations</li>
+                    <li>5. Sign the service contract and start formal cooperation (if needed)</li>
+                </ul>
+                <h4>Note</h4>
+                <p>• Initial consultation is free of charge for individuals and small businesses
+                <br>• We will keep all your information strictly confidential in accordance with the data protection regulations
+                <br>• For urgent consulting needs, please mark "Urgent" in the message or call our 24-hour hotline</p>
+            </div>
+
+            <div class="contact-row">
+                <div class="contact-info">
+                    <h3>Contact Information</h3>
+                    <div class="contact-item">
+                        <h4>Company Address</h4>
+                        <p>England Nottingham 87 Bromley Pl</p>
+                    </div>
+                    <div class="contact-item">
+                        <h4>Phone Number</h4>
+                        <p>+44 7748823381</p>
+                    </div>
+                    <div class="contact-item">
+                        <h4>Email Address</h4>
+                        <p>info@BoxTK 4.5finance.com</p>
+                    </div>
+                    <div class="contact-item">
+                        <h4>Business Hours</h4>
+                        <p>Monday - Friday: 9:00 AM - 6:00 PM</p>
+                        <p>Saturday - Sunday: Closed</p>
+                    </div>
+                </div>
+                <div class="contact-form">
+                    <form id="contactForm">
+                        <div class="form-group">
+                            <label for="name">Your Name</label>
+                            <input type="text" id="name" name="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Your Email</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="subject">Subject</label>
+                            <input type="text" id="subject" name="subject" required placeholder="e.g. Investment Consultation, Service Inquiry">
+                        </div>
+                        <div class="form-group">
+                            <label for="message">Your Message</label>
+                            <textarea id="message" name="message" required placeholder="Please describe your needs or questions in detail, we will reply to you as soon as possible."></textarea>
+                        </div>
+                        <button type="submit" class="btn">Submit Message</button>
+                        <div class="success-msg" id="successMsg">Your message has been submitted successfully! We will reply to you as soon as possible.</div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 BoxTK 4.5 Financial Information Consulting. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile Menu Toggle
+        const menuBtn = document.getElementById('menuBtn');
+        const mobileNav = document.getElementById('mobileNav');
+        menuBtn.addEventListener('click', () => {
+            mobileNav.classList.toggle('show');
+        });
+
+        // Navigation Active & Scroll
+        const navLinks = document.querySelectorAll('.main-nav a, .mobile-nav a');
+        const sections = document.querySelectorAll('section');
+
+        navLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                navLinks.forEach(l => l.classList.remove('active'));
+                this.classList.add('active');
+                mobileNav.classList.remove('show');
+            });
+        });
+
+        // Scroll Spy
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (pageYOffset >= sectionTop - 100) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === `#${current}`) {
+                    link.classList.add('active');
+                }
+            });
+        });
+
+        // Contact Form Submit
+        const contactForm = document.getElementById('contactForm');
+        const successMsg = document.getElementById('successMsg');
+        contactForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            successMsg.style.display = 'block';
+            contactForm.reset();
+            setTimeout(() => {
+                successMsg.style.display = 'none';
+            }, 3000);
+        });
+    </script>
+</body>
+</html>
